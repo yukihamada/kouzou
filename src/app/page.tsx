@@ -1,65 +1,83 @@
-import Image from "next/image";
+import Link from 'next/link'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { ClipboardList, Calculator } from 'lucide-react'
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="container mx-auto px-4 py-12">
+      <div className="text-center mb-12">
+        <h1 className="text-3xl font-bold mb-4">木造住宅 耐震診断ツール</h1>
+        <p className="text-zinc-600 max-w-2xl mx-auto">
+          お住まいの耐震性能を診断し、必要に応じた補強方法と概算費用を提案します。
+          まずは簡易診断でスクリーニングし、必要に応じて精密診断に進みましょう。
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-3 mb-2">
+              <ClipboardList className="h-8 w-8 text-blue-600" />
+              <CardTitle>簡易診断</CardTitle>
+            </div>
+            <CardDescription>
+              10問の問診に答えるだけで、お住まいの耐震性の目安がわかります。
+              専門知識は不要です。
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="text-sm text-zinc-600 space-y-1 mb-4">
+              <li>対象: 一般の住宅所有者</li>
+              <li>所要: 約5分</li>
+              <li>基準: 「誰でもできるわが家の耐震診断」準拠</li>
+            </ul>
+            <Link href="/simple">
+              <Button className="w-full">簡易診断を始める</Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-3 mb-2">
+              <Calculator className="h-8 w-8 text-green-600" />
+              <CardTitle>精密診断（一般診断法）</CardTitle>
+            </div>
+            <CardDescription>
+              壁量計算・偏心率・劣化度を考慮した上部構造評点(Iw)を算出します。
+              建築士・専門家向けです。
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="text-sm text-zinc-600 space-y-1 mb-4">
+              <li>対象: 建築士・専門家</li>
+              <li>計算: 壁量・偏心率・劣化度</li>
+              <li>基準: 2012年改訂版 精密診断法1</li>
+            </ul>
+            <Link href="/detailed/building-info">
+              <Button variant="outline" className="w-full">
+                精密診断を始める
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="mt-12 p-4 bg-amber-50 border border-amber-200 rounded-lg max-w-4xl mx-auto">
+        <p className="text-sm text-amber-800">
+          <strong>ご注意:</strong>{' '}
+          本ツールは簡易的な耐震診断の参考情報を提供するものです。
+          正確な耐震診断には、建築士等の専門家による現地調査が必要です。
+          本ツールの結果のみに基づいて建物の安全性を判断しないでください。
+        </p>
+      </div>
     </div>
-  );
+  )
 }
