@@ -7,7 +7,16 @@ import {
   CardContent,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ClipboardList, Calculator } from 'lucide-react'
+import {
+  ClipboardList,
+  Calculator,
+  Globe,
+  CircleDollarSign,
+  ShieldCheck,
+  MousePointerClick,
+  MessageCircleQuestion,
+  FileDown,
+} from 'lucide-react'
 
 export default function HomePage() {
   return (
@@ -20,6 +29,93 @@ export default function HomePage() {
         </p>
       </div>
 
+      {/* 3つの特徴セクション */}
+      <div className="mb-16">
+        <h2 className="text-xl font-bold text-center mb-8">3つの特徴</h2>
+        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="text-center p-6 bg-blue-50 rounded-lg">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-100 rounded-full mb-4">
+              <Globe className="h-7 w-7 text-blue-600" />
+            </div>
+            <h3 className="font-semibold mb-2">ダウンロード不要</h3>
+            <p className="text-sm text-zinc-600">
+              ブラウザだけで完結。アプリのインストールは一切不要です。
+            </p>
+          </div>
+          <div className="text-center p-6 bg-green-50 rounded-lg">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-green-100 rounded-full mb-4">
+              <CircleDollarSign className="h-7 w-7 text-green-600" />
+            </div>
+            <h3 className="font-semibold mb-2">完全無料</h3>
+            <p className="text-sm text-zinc-600">
+              登録不要、今すぐ使えます。費用は一切かかりません。
+            </p>
+          </div>
+          <div className="text-center p-6 bg-purple-50 rounded-lg">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-purple-100 rounded-full mb-4">
+              <ShieldCheck className="h-7 w-7 text-purple-600" />
+            </div>
+            <h3 className="font-semibold mb-2">プライバシー保護</h3>
+            <p className="text-sm text-zinc-600">
+              入力データはサーバーに送信されません。すべてブラウザ内で処理されます。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* 使い方セクション */}
+      <div className="mb-16">
+        <h2 className="text-xl font-bold text-center mb-8">使い方</h2>
+        <div className="max-w-3xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-8">
+            <div className="flex-1 text-center p-4">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-zinc-900 text-white rounded-full mb-3 text-lg font-bold">
+                1
+              </div>
+              <div className="flex justify-center mb-3">
+                <MousePointerClick className="h-8 w-8 text-zinc-500" />
+              </div>
+              <h3 className="font-semibold mb-1">診断タイプを選ぶ</h3>
+              <p className="text-sm text-zinc-600">
+                簡易診断か精密診断を選択
+              </p>
+            </div>
+            <div className="hidden md:flex items-center pt-6">
+              <div className="w-12 h-0.5 bg-zinc-300"></div>
+            </div>
+            <div className="flex-1 text-center p-4">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-zinc-900 text-white rounded-full mb-3 text-lg font-bold">
+                2
+              </div>
+              <div className="flex justify-center mb-3">
+                <MessageCircleQuestion className="h-8 w-8 text-zinc-500" />
+              </div>
+              <h3 className="font-semibold mb-1">質問に答える</h3>
+              <p className="text-sm text-zinc-600">
+                建物情報や状態を入力
+              </p>
+            </div>
+            <div className="hidden md:flex items-center pt-6">
+              <div className="w-12 h-0.5 bg-zinc-300"></div>
+            </div>
+            <div className="flex-1 text-center p-4">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-zinc-900 text-white rounded-full mb-3 text-lg font-bold">
+                3
+              </div>
+              <div className="flex justify-center mb-3">
+                <FileDown className="h-8 w-8 text-zinc-500" />
+              </div>
+              <h3 className="font-semibold mb-1">結果を確認</h3>
+              <p className="text-sm text-zinc-600">
+                診断結果をPDFでダウンロード
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 診断メニューセクション */}
+      <h2 className="text-xl font-bold text-center mb-8">診断メニュー</h2>
       <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
         <Card>
           <CardHeader>

@@ -20,6 +20,8 @@ import {
 import { ScoreGauge } from '@/components/visualization/score-gauge'
 import { RatingBadge } from '@/components/visualization/rating-badge'
 import { RATING_INFO } from '@/lib/calc/upper-structure-score'
+import { HelpTooltip, SeismicHelpTooltip } from '@/components/ui/help-tooltip'
+import { ShareButton } from '@/components/ui/share-button'
 import Link from 'next/link'
 
 interface DetailedResultDisplayProps {
@@ -68,6 +70,9 @@ export function DetailedResultDisplay({
           <CardTitle>精密診断結果（一般診断法）</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center gap-4">
+          <div className="text-center">
+            <SeismicHelpTooltip termKey="upperStructureScore" iconSize="md" />
+          </div>
           <ScoreGauge iw={result.overallIw} rating={result.overallRating} />
           <RatingBadge rating={result.overallRating} size="lg" />
           <p className="text-zinc-600 text-center max-w-md">
@@ -89,10 +94,17 @@ export function DetailedResultDisplay({
                 <TableHead>方向</TableHead>
                 <TableHead className="text-right">Qu (kN)</TableHead>
                 <TableHead className="text-right">Qr (kN)</TableHead>
-                <TableHead className="text-right">偏心率</TableHead>
+                <TableHead className="text-right">
+                  <SeismicHelpTooltip termKey="eccentricityRatio" />
+                </TableHead>
                 <TableHead className="text-right">eKfl</TableHead>
                 <TableHead className="text-right">dK</TableHead>
-                <TableHead className="text-right">Iw</TableHead>
+                <TableHead className="text-right">
+                  <HelpTooltip
+                    term="Iw"
+                    description="上部構造評点。建物の耐震性能を示す数値で、1.0以上で「一応倒壊しない」、1.5以上で「倒壊しない」と判定されます。"
+                  />
+                </TableHead>
                 <TableHead>判定</TableHead>
               </TableRow>
             </TableHeader>
@@ -132,7 +144,10 @@ export function DetailedResultDisplay({
       {/* 壁量サマリー */}
       <Card>
         <CardHeader>
-          <CardTitle>壁量サマリー</CardTitle>
+          <CardTitle>
+            <SeismicHelpTooltip termKey="wallQuantity" />
+            サマリー
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
@@ -189,7 +204,10 @@ export function DetailedResultDisplay({
       {/* 劣化度 */}
       <Card>
         <CardHeader>
-          <CardTitle>劣化度評価</CardTitle>
+          <CardTitle>
+            <SeismicHelpTooltip termKey="deterioration" />
+            評価
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-4">
@@ -220,6 +238,17 @@ export function DetailedResultDisplay({
           </CardContent>
         </Card>
       )}
+
+      {/* シェアボタン */}
+      <Card>
+        <CardContent className="pt-6">
+          <ShareButton
+            text={`耐震診断くんで自宅の耐震性を診断しました！結果は「${info.labelJa}」（上部構造評点 Iw=${result.overallIw.toFixed(2)}）でした。あなたも診断してみませんか？`}
+            url="https://kouzou.fly.dev"
+            title="耐震診断くん - 精密診断結果"
+          />
+        </CardContent>
+      </Card>
 
       <div className="flex gap-4">
         <Button variant="outline" onClick={onReset} className="flex-1">

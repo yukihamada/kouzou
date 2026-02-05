@@ -26,16 +26,19 @@ import { useDetailedDiagnosisStore } from '@/stores/detailed-diagnosis-store'
 import { useRouter } from 'next/navigation'
 import type { WallSegment, WallDirection, WallSpecificationType, JointSpecification } from '@/types/wall'
 import { calculateSingleWallStrength } from '@/lib/calc/wall-strength'
+import { useAutoSaveNotification } from '@/hooks/use-auto-save-notification'
 
 const wallTypeOptions = Object.entries(WALL_TYPE_LABELS).filter(
   ([key]) => key !== 'none' && key !== 'custom'
 )
 
 export function WallSpecForm() {
-  const { walls, addWall, removeWall, buildingInfo, nextStep, prevStep } =
+  const { walls, addWall, removeWall, buildingInfo, nextStep, prevStep, lastSavedAt } =
     useDetailedDiagnosisStore()
   const router = useRouter()
   const floors = buildingInfo.numberOfFloors ?? 1
+
+  useAutoSaveNotification(lastSavedAt)
 
   const [newWall, setNewWall] = useState<{
     floor: 1 | 2
@@ -75,11 +78,13 @@ export function WallSpecForm() {
 
   const handleNext = () => {
     nextStep()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     router.push('/detailed/deterioration')
   }
 
   const handleBack = () => {
     prevStep()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     router.push('/detailed/floor-plan')
   }
 
@@ -100,7 +105,7 @@ export function WallSpecForm() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
             {floors >= 2 && (
               <div className="space-y-1">
-                <Label className="text-xs">階</Label>
+                <Label className="text-xs mb-1 block">階</Label>
                 <Select
                   value={String(newWall.floor)}
                   onValueChange={(v) =>
@@ -117,7 +122,7 @@ export function WallSpecForm() {
             )}
 
             <div className="space-y-1">
-              <Label className="text-xs">方向</Label>
+              <Label className="text-xs mb-1 block">方向</Label>
               <Select
                 value={newWall.direction}
                 onValueChange={(v) =>
@@ -133,7 +138,7 @@ export function WallSpecForm() {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs">壁仕様</Label>
+              <Label className="text-xs mb-1 block">壁仕様</Label>
               <Select
                 value={newWall.wallType}
                 onValueChange={(v) =>
@@ -155,9 +160,10 @@ export function WallSpecForm() {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs">長さ (m)</Label>
+              <Label className="text-xs mb-1 block">長さ (m)</Label>
               <Input
                 type="number"
+                inputMode="decimal"
                 step="0.1"
                 value={newWall.length}
                 onChange={(e) =>
@@ -167,7 +173,7 @@ export function WallSpecForm() {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs">接合部</Label>
+              <Label className="text-xs mb-1 block">接合部</Label>
               <Select
                 value={newWall.jointSpec}
                 onValueChange={(v) =>
@@ -190,9 +196,10 @@ export function WallSpecForm() {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs">X位置 (mm)</Label>
+              <Label className="text-xs mb-1 block">X位置 (mm)</Label>
               <Input
                 type="number"
+                inputMode="decimal"
                 value={newWall.positionX}
                 onChange={(e) =>
                   setNewWall({ ...newWall, positionX: e.target.value })
@@ -201,9 +208,10 @@ export function WallSpecForm() {
             </div>
 
             <div className="space-y-1">
-              <Label className="text-xs">Y位置 (mm)</Label>
+              <Label className="text-xs mb-1 block">Y位置 (mm)</Label>
               <Input
                 type="number"
+                inputMode="decimal"
                 value={newWall.positionY}
                 onChange={(e) =>
                   setNewWall({ ...newWall, positionY: e.target.value })
@@ -212,7 +220,7 @@ export function WallSpecForm() {
             </div>
           </div>
 
-          <Button onClick={handleAdd} size="sm">
+          <Button onClick={handleAdd} size="sm" className="min-h-[44px]">
             <Plus className="h-4 w-4 mr-1" />
             壁を追加
           </Button>
@@ -288,10 +296,10 @@ export function WallSpecForm() {
       })}
 
       <div className="flex justify-between">
-        <Button variant="outline" onClick={handleBack}>
+        <Button variant="outline" onClick={handleBack} className="min-h-[44px]">
           戻る
         </Button>
-        <Button onClick={handleNext} disabled={walls.length === 0}>
+        <Button onClick={handleNext} disabled={walls.length === 0} className="min-h-[44px]">
           次へ：劣化度調査
         </Button>
       </div>

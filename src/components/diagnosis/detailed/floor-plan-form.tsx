@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useDetailedDiagnosisStore } from '@/stores/detailed-diagnosis-store'
 import { useRouter } from 'next/navigation'
+import { useAutoSaveNotification } from '@/hooks/use-auto-save-notification'
 
 const floorSchema = z.object({
   width: z.number().min(1, '1以上').max(100, '100m以下'),
@@ -23,10 +24,12 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 export function FloorPlanForm() {
-  const { buildingInfo, setBuildingInfo, nextStep, prevStep } =
+  const { buildingInfo, setBuildingInfo, nextStep, prevStep, lastSavedAt } =
     useDetailedDiagnosisStore()
   const router = useRouter()
   const floors = buildingInfo.numberOfFloors ?? 1
+
+  useAutoSaveNotification(lastSavedAt)
 
   const {
     register,
@@ -90,11 +93,13 @@ export function FloorPlanForm() {
       },
     })
     nextStep()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     router.push('/detailed/wall-spec')
   }
 
   const handleBack = () => {
     prevStep()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     router.push('/detailed/building-info')
   }
 
@@ -107,8 +112,8 @@ export function FloorPlanForm() {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>X方向（間口）(m)</Label>
-              <Input type="number" step="0.1" {...register('floor1.width', { valueAsNumber: true })} />
+              <Label className="mb-1 block">X方向（間口）(m)</Label>
+              <Input type="number" inputMode="decimal" step="0.1" {...register('floor1.width', { valueAsNumber: true })} />
               {errors.floor1?.width && (
                 <p className="text-xs text-red-500">
                   {errors.floor1.width.message}
@@ -116,8 +121,8 @@ export function FloorPlanForm() {
               )}
             </div>
             <div className="space-y-2">
-              <Label>Y方向（奥行）(m)</Label>
-              <Input type="number" step="0.1" {...register('floor1.depth', { valueAsNumber: true })} />
+              <Label className="mb-1 block">Y方向（奥行）(m)</Label>
+              <Input type="number" inputMode="decimal" step="0.1" {...register('floor1.depth', { valueAsNumber: true })} />
               {errors.floor1?.depth && (
                 <p className="text-xs text-red-500">
                   {errors.floor1.depth.message}
@@ -153,17 +158,19 @@ export function FloorPlanForm() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>X方向（間口）(m)</Label>
+                <Label className="mb-1 block">X方向（間口）(m)</Label>
                 <Input
                   type="number"
+                  inputMode="decimal"
                   step="0.1"
                   {...register('floor2.width', { valueAsNumber: true })}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Y方向（奥行）(m)</Label>
+                <Label className="mb-1 block">Y方向（奥行）(m)</Label>
                 <Input
                   type="number"
+                  inputMode="decimal"
                   step="0.1"
                   {...register('floor2.depth', { valueAsNumber: true })}
                 />
@@ -177,10 +184,10 @@ export function FloorPlanForm() {
       )}
 
       <div className="flex justify-between">
-        <Button variant="outline" type="button" onClick={handleBack}>
+        <Button variant="outline" type="button" onClick={handleBack} className="min-h-[44px]">
           戻る
         </Button>
-        <Button type="submit">次へ：壁仕様入力</Button>
+        <Button type="submit" className="min-h-[44px]">次へ：壁仕様入力</Button>
       </div>
     </form>
   )

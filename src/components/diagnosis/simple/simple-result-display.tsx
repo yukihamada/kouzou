@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { FileDown, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { ShareButton } from '@/components/ui/share-button'
 
 const ratingConfig = {
   safe: {
@@ -90,6 +91,17 @@ export function SimpleResultDisplay({
           </CardContent>
         </Card>
       )}
+
+      {/* シェアボタン */}
+      <Card>
+        <CardContent className="pt-6">
+          <ShareButton
+            text={`耐震診断くんで自宅の耐震性を診断しました！結果は「${config.label}」（${result.totalScore}/10点）でした。あなたも診断してみませんか？`}
+            url="https://kouzou.fly.dev"
+            title="耐震診断くん - 簡易診断結果"
+          />
+        </CardContent>
+      </Card>
 
       <div className="flex gap-4">
         <Button variant="outline" onClick={onReset} className="flex-1">

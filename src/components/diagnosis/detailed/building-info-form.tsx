@@ -17,6 +17,7 @@ import {
 import { PREFECTURE_LIST, REGION_COEFFICIENTS } from '@/lib/constants/region-coefficients'
 import { useDetailedDiagnosisStore } from '@/stores/detailed-diagnosis-store'
 import { useRouter } from 'next/navigation'
+import { useAutoSaveNotification } from '@/hooks/use-auto-save-notification'
 
 const schema = z.object({
   constructionMethod: z.enum(['conventional', '2x4']),
@@ -40,8 +41,10 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 export function BuildingInfoForm() {
-  const { buildingInfo, setBuildingInfo, nextStep } = useDetailedDiagnosisStore()
+  const { buildingInfo, setBuildingInfo, nextStep, lastSavedAt } = useDetailedDiagnosisStore()
   const router = useRouter()
+
+  useAutoSaveNotification(lastSavedAt)
 
   const {
     register,
@@ -87,6 +90,7 @@ export function BuildingInfoForm() {
       diagnosisDate: new Date().toISOString().split('T')[0],
     })
     nextStep()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     router.push('/detailed/floor-plan')
   }
 
@@ -106,7 +110,7 @@ export function BuildingInfoForm() {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>構法</Label>
+              <Label className="mb-1 block">構法</Label>
               <Select
                 defaultValue={watch('constructionMethod')}
                 onValueChange={(v) =>
@@ -128,10 +132,11 @@ export function BuildingInfoForm() {
             </div>
 
             <div className="space-y-2">
-              <Label>建築年（西暦）</Label>
+              <Label className="mb-1 block">建築年（西暦）</Label>
               <div className="flex items-center gap-2">
                 <Input
                   type="number"
+                  inputMode="decimal"
                   {...register('buildYear', { valueAsNumber: true })}
                   className="flex-1"
                 />
@@ -150,7 +155,7 @@ export function BuildingInfoForm() {
             </div>
 
             <div className="space-y-2">
-              <Label>階数</Label>
+              <Label className="mb-1 block">階数</Label>
               <Select
                 defaultValue={String(watch('numberOfFloors'))}
                 onValueChange={(v) =>
@@ -169,7 +174,7 @@ export function BuildingInfoForm() {
             </div>
 
             <div className="space-y-2">
-              <Label>屋根の重さ</Label>
+              <Label className="mb-1 block">屋根の重さ</Label>
               <Select
                 defaultValue={watch('roofWeight')}
                 onValueChange={(v) =>
@@ -192,7 +197,7 @@ export function BuildingInfoForm() {
             </div>
 
             <div className="space-y-2">
-              <Label>基礎の種類</Label>
+              <Label className="mb-1 block">基礎の種類</Label>
               <Select
                 defaultValue={watch('foundationType')}
                 onValueChange={(v) =>
@@ -219,7 +224,7 @@ export function BuildingInfoForm() {
             </div>
 
             <div className="space-y-2">
-              <Label>地盤の状態</Label>
+              <Label className="mb-1 block">地盤の状態</Label>
               <Select
                 defaultValue={watch('groundType')}
                 onValueChange={(v) =>
@@ -240,7 +245,7 @@ export function BuildingInfoForm() {
             </div>
 
             <div className="space-y-2">
-              <Label>所在地（都道府県）</Label>
+              <Label className="mb-1 block">所在地（都道府県）</Label>
               <Select
                 defaultValue={watch('prefecture')}
                 onValueChange={(v) => setValue('prefecture', v)}
@@ -259,8 +264,8 @@ export function BuildingInfoForm() {
             </div>
 
             <div className="space-y-2">
-              <Label>積雪深 (m)</Label>
-              <Input type="number" step="0.1" {...register('snowDepthM', { valueAsNumber: true })} />
+              <Label className="mb-1 block">積雪深 (m)</Label>
+              <Input type="number" inputMode="decimal" step="0.1" {...register('snowDepthM', { valueAsNumber: true })} />
             </div>
           </div>
         </CardContent>
@@ -273,11 +278,11 @@ export function BuildingInfoForm() {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>所有者名</Label>
+              <Label className="mb-1 block">所有者名</Label>
               <Input {...register('ownerName')} />
             </div>
             <div className="space-y-2">
-              <Label>住所</Label>
+              <Label className="mb-1 block">住所</Label>
               <Input {...register('address')} />
             </div>
           </div>
@@ -285,7 +290,7 @@ export function BuildingInfoForm() {
       </Card>
 
       <div className="flex justify-end">
-        <Button type="submit">次へ：平面図入力</Button>
+        <Button type="submit" className="min-h-[44px]">次へ：平面図入力</Button>
       </div>
     </form>
   )

@@ -13,6 +13,7 @@ interface DetailedDiagnosisStore {
   deteriorationItems: DeteriorationItem[]
   result: DetailedDiagnosisResult | null
   reinforcementPlan: ReinforcementPlan | null
+  lastSavedAt: string | null
 
   setBuildingInfo: (info: Partial<BuildingInfo>) => void
   addWall: (wall: WallSegment) => void
@@ -27,48 +28,57 @@ interface DetailedDiagnosisStore {
   prevStep: () => void
   goToStep: (step: number) => void
   reset: () => void
+  hasData: () => boolean
 }
 
 export const useDetailedDiagnosisStore = create<DetailedDiagnosisStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       currentStep: 0,
       buildingInfo: {},
       walls: [],
       deteriorationItems: [],
       result: null,
       reinforcementPlan: null,
+      lastSavedAt: null,
 
       setBuildingInfo: (info) =>
         set((state) => ({
           buildingInfo: { ...state.buildingInfo, ...info },
+          lastSavedAt: new Date().toISOString(),
         })),
 
       addWall: (wall) =>
-        set((state) => ({ walls: [...state.walls, wall] })),
+        set((state) => ({
+          walls: [...state.walls, wall],
+          lastSavedAt: new Date().toISOString(),
+        })),
 
       updateWall: (id, updates) =>
         set((state) => ({
           walls: state.walls.map((w) =>
             w.id === id ? { ...w, ...updates } : w
           ),
+          lastSavedAt: new Date().toISOString(),
         })),
 
       removeWall: (id) =>
         set((state) => ({
           walls: state.walls.filter((w) => w.id !== id),
+          lastSavedAt: new Date().toISOString(),
         })),
 
-      setWalls: (walls) => set({ walls }),
+      setWalls: (walls) => set({ walls, lastSavedAt: new Date().toISOString() }),
 
       setDeteriorationItems: (items) =>
-        set({ deteriorationItems: items }),
+        set({ deteriorationItems: items, lastSavedAt: new Date().toISOString() }),
 
       toggleDeteriorationItem: (id) =>
         set((state) => ({
           deteriorationItems: state.deteriorationItems.map((item) =>
             item.id === id ? { ...item, checked: !item.checked } : item
           ),
+          lastSavedAt: new Date().toISOString(),
         })),
 
       setResult: (result) => set({ result }),
@@ -92,7 +102,17 @@ export const useDetailedDiagnosisStore = create<DetailedDiagnosisStore>()(
           deteriorationItems: [],
           result: null,
           reinforcementPlan: null,
+          lastSavedAt: null,
         }),
+
+      hasData: () => {
+        const state = get()
+        return (
+          Object.keys(state.buildingInfo).length > 0 ||
+          state.walls.length > 0 ||
+          state.deteriorationItems.some((item) => item.checked)
+        )
+      },
     }),
     { name: 'detailed-diagnosis' }
   )

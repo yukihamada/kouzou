@@ -13,6 +13,7 @@ import {
 } from '@/lib/constants/deterioration-items'
 import { calculateDeteriorationFactor } from '@/lib/calc/deterioration'
 import type { DeteriorationCategory } from '@/types/deterioration'
+import { useAutoSaveNotification } from '@/hooks/use-auto-save-notification'
 
 const categoryLabels: Record<DeteriorationCategory, string> = {
   foundation: '基礎',
@@ -33,8 +34,11 @@ export function DeteriorationForm() {
     toggleDeteriorationItem,
     nextStep,
     prevStep,
+    lastSavedAt,
   } = useDetailedDiagnosisStore()
   const router = useRouter()
+
+  useAutoSaveNotification(lastSavedAt)
 
   useEffect(() => {
     if (deteriorationItems.length === 0) {
@@ -50,11 +54,13 @@ export function DeteriorationForm() {
 
   const handleNext = () => {
     nextStep()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     router.push('/detailed/foundation')
   }
 
   const handleBack = () => {
     prevStep()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     router.push('/detailed/wall-spec')
   }
 
@@ -113,10 +119,10 @@ export function DeteriorationForm() {
       })}
 
       <div className="flex justify-between">
-        <Button variant="outline" onClick={handleBack}>
+        <Button variant="outline" onClick={handleBack} className="min-h-[44px]">
           戻る
         </Button>
-        <Button onClick={handleNext}>次へ：診断実行</Button>
+        <Button onClick={handleNext} className="min-h-[44px]">次へ：診断実行</Button>
       </div>
     </div>
   )

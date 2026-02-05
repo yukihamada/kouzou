@@ -20,6 +20,7 @@ export function ResultPageClient() {
 
   const handleReset = () => {
     reset()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     router.push('/detailed/building-info')
   }
 

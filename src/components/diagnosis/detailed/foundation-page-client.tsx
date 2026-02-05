@@ -8,6 +8,7 @@ import { calculateDetailedDiagnosis } from '@/lib/calc/upper-structure-score'
 import { generateReinforcementPlan } from '@/lib/calc/reinforcement'
 import { toast } from '@/hooks/use-toast'
 import type { BuildingInfo } from '@/types/building'
+import { useAutoSaveNotification } from '@/hooks/use-auto-save-notification'
 
 export function FoundationPageClient() {
   const {
@@ -17,8 +18,11 @@ export function FoundationPageClient() {
     setResult,
     setReinforcementPlan,
     prevStep,
+    lastSavedAt,
   } = useDetailedDiagnosisStore()
   const router = useRouter()
+
+  useAutoSaveNotification(lastSavedAt)
 
   const canRun =
     walls.length > 0 &&
@@ -41,6 +45,7 @@ export function FoundationPageClient() {
       const plan = generateReinforcementPlan(result)
       setReinforcementPlan(plan)
 
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       router.push('/detailed/result')
     } catch {
       toast({
@@ -53,6 +58,7 @@ export function FoundationPageClient() {
 
   const handleBack = () => {
     prevStep()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     router.push('/detailed/deterioration')
   }
 
@@ -104,10 +110,10 @@ export function FoundationPageClient() {
       )}
 
       <div className="flex justify-between mt-6">
-        <Button variant="outline" onClick={handleBack}>
+        <Button variant="outline" onClick={handleBack} className="min-h-[44px]">
           戻る
         </Button>
-        <Button onClick={handleRunDiagnosis} size="lg" disabled={!canRun}>
+        <Button onClick={handleRunDiagnosis} size="lg" disabled={!canRun} className="min-h-[44px]">
           診断を実行する
         </Button>
       </div>
