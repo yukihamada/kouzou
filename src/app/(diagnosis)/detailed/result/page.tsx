@@ -1,37 +1,20 @@
-'use client'
+import type { Metadata } from 'next'
+import { ResultPageClient } from '@/components/diagnosis/detailed/result-page-client'
 
-import { useDetailedDiagnosisStore } from '@/stores/detailed-diagnosis-store'
-import { DetailedResultDisplay } from '@/components/diagnosis/detailed/detailed-result-display'
-import { useRouter } from 'next/navigation'
+export const metadata: Metadata = {
+  title: '精密耐震診断 - 診断結果',
+  description:
+    '木造住宅の精密耐震診断結果。上部構造評点（Iw）、壁量充足率、偏心率、劣化度を確認できます。',
+  openGraph: {
+    title: '精密耐震診断 - 診断結果',
+    description:
+      '木造住宅の精密耐震診断結果。上部構造評点（Iw）、壁量充足率、偏心率、劣化度を確認できます。',
+  },
+  alternates: {
+    canonical: '/detailed/result',
+  },
+}
 
 export default function DetailedResultPage() {
-  const { result, reinforcementPlan, walls, deteriorationItems, reset } = useDetailedDiagnosisStore()
-  const router = useRouter()
-
-  if (!result) {
-    return (
-      <div className="container mx-auto max-w-3xl px-4 py-8 text-center">
-        <p className="text-zinc-500">
-          診断結果がありません。先に診断を実行してください。
-        </p>
-      </div>
-    )
-  }
-
-  const handleReset = () => {
-    reset()
-    router.push('/detailed/building-info')
-  }
-
-  return (
-    <div className="container mx-auto max-w-4xl px-4 py-8">
-      <DetailedResultDisplay
-        result={result}
-        reinforcementPlan={reinforcementPlan}
-        walls={walls}
-        deteriorationItems={deteriorationItems}
-        onReset={handleReset}
-      />
-    </div>
-  )
+  return <ResultPageClient />
 }

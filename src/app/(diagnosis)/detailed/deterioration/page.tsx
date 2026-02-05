@@ -1,12 +1,20 @@
-'use client'
+import type { Metadata } from 'next'
+import { DeteriorationPageClient } from '@/components/diagnosis/detailed/deterioration-page-client'
 
-import { DeteriorationForm } from '@/components/diagnosis/detailed/deterioration-form'
+export const metadata: Metadata = {
+  title: '精密耐震診断 - 劣化度調査',
+  description:
+    '木造住宅の精密耐震診断。建物の劣化状況をチェックして、劣化度低減係数を算出します。',
+  openGraph: {
+    title: '精密耐震診断 - 劣化度調査',
+    description:
+      '木造住宅の精密耐震診断。建物の劣化状況をチェックして、劣化度低減係数を算出します。',
+  },
+  alternates: {
+    canonical: '/detailed/deterioration',
+  },
+}
 
 export default function DeteriorationPage() {
-  return (
-    <div className="container mx-auto max-w-3xl px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Step 4: 劣化度調査</h1>
-      <DeteriorationForm />
-    </div>
-  )
+  return <DeteriorationPageClient />
 }

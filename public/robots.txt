@@ -1,4 +1,11 @@
+# 耐震診断くん - robots.txt
+# https://kouzou.fly.dev
+
 User-agent: *
 Allow: /
 
+# サイトマップ
 Sitemap: https://kouzou.fly.dev/sitemap.xml
+
+# クロールを最適化
+Crawl-delay: 1

@@ -1,12 +1,20 @@
-'use client'
+import type { Metadata } from 'next'
+import { FloorPlanPageClient } from '@/components/diagnosis/detailed/floor-plan-page-client'
 
-import { FloorPlanForm } from '@/components/diagnosis/detailed/floor-plan-form'
+export const metadata: Metadata = {
+  title: '精密耐震診断 - 平面図・寸法入力',
+  description:
+    '木造住宅の精密耐震診断。建物の平面形状・寸法を入力して、床面積と形状係数を計算します。',
+  openGraph: {
+    title: '精密耐震診断 - 平面図・寸法入力',
+    description:
+      '木造住宅の精密耐震診断。建物の平面形状・寸法を入力して、床面積と形状係数を計算します。',
+  },
+  alternates: {
+    canonical: '/detailed/floor-plan',
+  },
+}
 
 export default function FloorPlanPage() {
-  return (
-    <div className="container mx-auto max-w-3xl px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Step 2: 平面図・寸法入力</h1>
-      <FloorPlanForm />
-    </div>
-  )
+  return <FloorPlanPageClient />
 }
