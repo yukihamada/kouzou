@@ -78,6 +78,29 @@ export default function HomePage() {
           本ツールの結果のみに基づいて建物の安全性を判断しないでください。
         </p>
       </div>
+
+      <div className="mt-8 max-w-4xl mx-auto">
+        <div className="border rounded-lg p-6 bg-gradient-to-r from-gray-900 to-gray-800 text-white">
+          <div className="flex items-center gap-4">
+            <div className="flex-1">
+              <p className="text-xs text-gray-400 mb-1">関連サービス</p>
+              <h3 className="text-lg font-bold mb-2">GOD&apos;S EYE</h3>
+              <p className="text-sm text-gray-300 mb-3">
+                建物の外観写真からAIが地震倒壊リスクを瞬時に評価。
+                住所を入力するだけで、Street View画像から自動診断します。
+              </p>
+              <a
+                href="https://godseye-web.fly.dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium rounded transition-colors"
+              >
+                外観AI診断を試す →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

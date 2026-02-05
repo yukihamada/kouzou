@@ -9,6 +9,17 @@ export function Footer() {
         <p className="mt-1">
           正確な診断には建築士等の専門家にご相談ください。
         </p>
+        <div className="mt-4 pt-4 border-t border-zinc-200">
+          <p className="text-xs text-zinc-400 mb-2">関連サービス</p>
+          <a
+            href="https://godseye-web.fly.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:underline text-xs"
+          >
+            GOD&apos;S EYE - AI画像解析による建物倒壊リスク評価
+          </a>
+        </div>
       </div>
     </footer>
   )
