@@ -1,33 +1,41 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useCallback, useSyncExternalStore } from 'react'
 import { BuildingInfoForm } from '@/components/diagnosis/detailed/building-info-form'
 import { ResumeDialog } from '@/components/ui/resume-dialog'
 import { useDetailedDiagnosisStore } from '@/stores/detailed-diagnosis-store'
 
-export function BuildingInfoPageClient() {
-  const { hasData, reset } = useDetailedDiagnosisStore()
-  const [showResumeDialog, setShowResumeDialog] = useState(false)
-  const [isHydrated, setIsHydrated] = useState(false)
+// Zustandのhydration状態を監視するためのカスタムフック
+function useHasDataAfterHydration() {
+  const { hasData } = useDetailedDiagnosisStore()
 
-  // クライアントサイドでのみ実行されるようにする（Zustandのpersistがhydrateされた後）
-  useEffect(() => {
-    setIsHydrated(true)
+  // サーバーサイドでは常にfalseを返す
+  const subscribe = useCallback((callback: () => void) => {
+    // Zustandのpersist rehydrateイベントをリッスン
+    const unsubscribe = useDetailedDiagnosisStore.persist.onFinishHydration(callback)
+    return unsubscribe
   }, [])
 
-  useEffect(() => {
-    if (isHydrated && hasData()) {
-      setShowResumeDialog(true)
-    }
-  }, [isHydrated, hasData])
+  const getSnapshot = useCallback(() => hasData(), [hasData])
+  const getServerSnapshot = useCallback(() => false, [])
+
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
+}
+
+export function BuildingInfoPageClient() {
+  const { reset } = useDetailedDiagnosisStore()
+  const hasDataAfterHydration = useHasDataAfterHydration()
+  const [dialogDismissed, setDialogDismissed] = useState(false)
+
+  const showResumeDialog = hasDataAfterHydration && !dialogDismissed
 
   const handleResume = () => {
-    setShowResumeDialog(false)
+    setDialogDismissed(true)
   }
 
   const handleStartOver = () => {
     reset()
-    setShowResumeDialog(false)
+    setDialogDismissed(true)
   }
 
   return (
