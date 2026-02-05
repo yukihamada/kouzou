@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { calculateDetailedDiagnosis } from '@/lib/calc/upper-structure-score'
 import { generateReinforcementPlan } from '@/lib/calc/reinforcement'
+import { toast } from '@/hooks/use-toast'
 import type { BuildingInfo } from '@/types/building'
 
 export default function FoundationPage() {
@@ -42,7 +43,11 @@ export default function FoundationPage() {
 
       router.push('/detailed/result')
     } catch {
-      alert('診断の実行中にエラーが発生しました。入力データを確認してください。')
+      toast({
+        variant: 'destructive',
+        title: 'エラー',
+        description: '診断の実行中にエラーが発生しました。入力データを確認してください。',
+      })
     }
   }
 

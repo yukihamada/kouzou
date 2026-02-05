@@ -14,3 +14,10 @@ primary_region = 'nrt'
   memory = '512mb'
   cpu_kind = 'shared'
   cpus = 1
+
+[[http_service.checks]]
+  grace_period = '10s'
+  interval = '30s'
+  method = 'GET'
+  timeout = '5s'
+  path = '/api/health'

@@ -11,8 +11,8 @@ import { useDetailedDiagnosisStore } from '@/stores/detailed-diagnosis-store'
 import { useRouter } from 'next/navigation'
 
 const floorSchema = z.object({
-  width: z.number().min(1, '1以上'),
-  depth: z.number().min(1, '1以上'),
+  width: z.number().min(1, '1以上').max(100, '100m以下'),
+  depth: z.number().min(1, '1以上').max(100, '100m以下'),
 })
 
 const schema = z.object({

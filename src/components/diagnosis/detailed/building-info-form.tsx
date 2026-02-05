@@ -33,8 +33,8 @@ const schema = z.object({
   groundType: z.enum(['good', 'normal', 'soft']),
   prefecture: z.string().min(1),
   snowDepthM: z.number().min(0).max(5),
-  address: z.string().optional(),
-  ownerName: z.string().optional(),
+  address: z.string().max(200).optional(),
+  ownerName: z.string().max(100).optional(),
 })
 
 type FormData = z.infer<typeof schema>

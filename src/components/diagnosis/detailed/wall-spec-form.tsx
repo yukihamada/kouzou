@@ -57,7 +57,7 @@ export function WallSpecForm() {
 
   const handleAdd = () => {
     const length = parseFloat(newWall.length)
-    if (isNaN(length) || length <= 0) return
+    if (isNaN(length) || length <= 0 || length > 100) return
 
     const wall: WallSegment = {
       id: crypto.randomUUID(),
